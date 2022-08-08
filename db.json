@@ -7,6 +7,34 @@
     {
       "nome": "java",
       "id": 2
+    },
+    {
+      "nome": "Angular 11",
+      "id": 3
+    },
+    {
+      "nome": "React JS",
+      "id": 4
+    },
+    {
+      "nome": "Java",
+      "id": 5
+    },
+    {
+      "id": 12,
+      "nome": "Materal 7"
+    },
+    {
+      "id": 13,
+      "nome": "VUE"
+    },
+    {
+      "id": 14,
+      "nome": "Vue JS"
+    },
+    {
+      "id": 15,
+      "nome": "PHP"
     }
   ]
 }

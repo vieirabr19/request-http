@@ -4,6 +4,7 @@ import { CursosService } from '../cursos.service';
 import { EMPTY, Observable, Subject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { AlertModalService } from 'src/app/shared/alert-modal/alert-modal.service';
+import { ActivatedRoute, Router } from '@angular/router';
 // import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 // import { AlertModalComponent } from 'src/app/shared/alert-modal/alert-modal.component';
 
@@ -20,7 +21,9 @@ export class CursosListaComponent implements OnInit {
 
   constructor(
     private cursosService: CursosService,
-    private alertModalService: AlertModalService
+    private alertModalService: AlertModalService,
+    private router: Router,
+    private route: ActivatedRoute
     // private modalService: BsModalService
   ) { }
 
@@ -40,6 +43,10 @@ export class CursosListaComponent implements OnInit {
         return EMPTY;
       })
     );
+  }
+
+  onEdit(id: number){
+    this.router.navigate(['editar', id], {relativeTo: this.route});
   }
 
   handleError(){
