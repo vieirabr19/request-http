@@ -19,7 +19,7 @@ export class CursosService {
   list(){
     return this.http.get<Curso[]>(this.API)
       .pipe(
-        delay(1000)
+        delay(500)
         // tap(console.log)
       )
   }
@@ -41,5 +41,9 @@ export class CursosService {
       return this.update(curso);
     }
     return this.create(curso);
+  }
+
+  delete(id: number){
+    return this.http.delete<Curso>(`${this.API}/${id}`).pipe(take(1));
   }
 }
