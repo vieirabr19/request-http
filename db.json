@@ -7,6 +7,10 @@
     {
       "nome": "java",
       "id": 2
+    },
+    {
+      "nome": "Angular 11",
+      "id": 3
     }
   ]
 }
