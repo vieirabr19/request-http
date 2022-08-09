@@ -39,7 +39,6 @@ export class CursosFormComponent implements OnInit {
     // exhaustMap -> casos de login
 
     const curso = this.route.snapshot.data['curso'];
-    console.log('CURSO',curso);
 
     this.form = this.fb.group({
       id: [curso[0].id],
@@ -50,15 +49,30 @@ export class CursosFormComponent implements OnInit {
   onSumit(){
     this.submitted = true;
     if(this.form.valid){
-      console.log('FORM',this.form.value)
-      this.cursosService.create(this.form.value).subscribe({
+      let msgSuccess = 'Curso criado com sucesso!';
+      let msgErro = 'Erro ao criar curso, tente novamente.';
+      if(this.form.value.id){
+        msgSuccess = 'Curso atualizado com sucesso!';
+        msgErro = 'Erro ao atualizar curso, tente novamente.';
+      }
+
+      this.cursosService.save(this.form.value).subscribe({
         next: () => {
-          this.alertModalService.showAlertSuccess('Curso criado com sucesso!');
+          this.alertModalService.showAlertSuccess(msgSuccess);
           this.location.back();
         },
-        error: () => this.alertModalService.showAlertDanger('Erro ao criar curso, tente novamente.'),
+        error: () => this.alertModalService.showAlertDanger(msgErro),
         complete: () => console.log('Completou')
-      })
+      });
+
+      // this.cursosService.create(this.form.value).subscribe({
+      //   next: () => {
+      //     this.alertModalService.showAlertSuccess('Curso criado com sucesso!');
+      //     this.location.back();
+      //   },
+      //   error: () => this.alertModalService.showAlertDanger('Erro ao criar curso, tente novamente.'),
+      //   complete: () => console.log('Completou')
+      // })
     }
   }
 
