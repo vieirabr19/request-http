@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 import { AlertModalComponent } from './alert-modal.component';
 
 enum AlertTypes {
@@ -62,5 +63,15 @@ export class AlertModalService {
 
   showAlertDark(message: string){
     this.showAlert(message, AlertTypes.DARK);
+  }
+
+  showConfirm(title: string, message: string, cancelTxt?: string, okTxt?: string){
+    const bsModalRef: BsModalRef = this.modalService.show(ConfirmModalComponent);
+    bsModalRef.content.title = title;
+    bsModalRef.content.message = message;
+    if(cancelTxt) bsModalRef.content.cancelTxt = cancelTxt;
+    if(okTxt) bsModalRef.content.okTxt = okTxt;
+
+    return (<ConfirmModalComponent>bsModalRef.content).confirmResult;
   }
 }

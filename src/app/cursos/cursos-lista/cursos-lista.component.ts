@@ -1,8 +1,8 @@
 import { Curso } from './../curso';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { CursosService } from '../cursos.service';
-import { EMPTY, Observable, Subject } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { EMPTY, Observable, Subject, switchMap } from 'rxjs';
+import { catchError, tap, take } from 'rxjs/operators';
 import { AlertModalService } from 'src/app/shared/alert-modal/alert-modal.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -53,27 +53,42 @@ export class CursosListaComponent implements OnInit {
   }
 
   onDelete(curso: Curso){
-    this.cursoSelected = curso;
-    this.bsModalRef = this.modalService.show(this.deleteModal, {class: 'modal-md'});
+    // this.cursoSelected = curso;
+    // this.bsModalRef = this.modalService.show(this.deleteModal, {class: 'modal-md'});
+    this.alertModalService.showConfirm('Confirmação', 'Tem certeza que deseja remover esse curso?')
+      .asObservable()
+      .pipe(
+        take(1),
+        switchMap(result => result ? this.cursosService.delete(curso.id) : EMPTY)
+      )
+      .subscribe({
+        next: () => {
+          this.onReflash();
+          this.alertModalService.showAlertSuccess('Curso removido com sucesso!');
+        },
+        error: () => {
+          this.handleError('Erro ao deletar curso, tente novamente.');
+        }
+      });
   }
 
-  onConfirmDelete(): void {
-    this.cursosService.delete(this.cursoSelected.id).subscribe({
-      next: () => {
-        this.onDeclineDelete();
-        this.onReflash();
-        this.alertModalService.showAlertSuccess('Curso removido com sucesso!');
-      },
-      error: () => {
-        this.onDeclineDelete();
-        this.handleError('Erro ao deletar curso, tente novamente.');
-      }
-    })
-  }
+  // onConfirmDelete(): void {
+  //   this.cursosService.delete(this.cursoSelected.id).subscribe({
+  //     next: () => {
+  //       this.onDeclineDelete();
+  //       this.onReflash();
+  //       this.alertModalService.showAlertSuccess('Curso removido com sucesso!');
+  //     },
+  //     error: () => {
+  //       this.onDeclineDelete();
+  //       this.handleError('Erro ao deletar curso, tente novamente.');
+  //     }
+  //   })
+  // }
 
-  onDeclineDelete(): void {
-    this.bsModalRef?.hide();
-  }
+  // onDeclineDelete(): void {
+  //   this.bsModalRef?.hide();
+  // }
 
   handleError(message: string){
     this.alertModalService.showAlertDanger(message);
