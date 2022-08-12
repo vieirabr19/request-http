@@ -65,7 +65,7 @@ export class AlertModalService {
     this.showAlert(message, AlertTypes.DARK);
   }
 
-  showConfirm(title: string, message: string, cancelTxt?: string, okTxt?: string){
+  showConfirm(message: string, title: string, cancelTxt?: string, okTxt?: string){
     const bsModalRef: BsModalRef = this.modalService.show(ConfirmModalComponent);
     bsModalRef.content.title = title;
     bsModalRef.content.message = message;
