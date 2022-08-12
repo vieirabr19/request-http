@@ -6,6 +6,7 @@ import { catchError, tap, take } from 'rxjs/operators';
 import { AlertModalService } from 'src/app/shared/alert-modal/alert-modal.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Cursos2Service } from '../cursos2.service';
 // import { AlertModalComponent } from 'src/app/shared/alert-modal/alert-modal.component';
 
 @Component({
@@ -23,7 +24,8 @@ export class CursosListaComponent implements OnInit {
   @ViewChild('deleteModal') deleteModal: TemplateRef<any>;
 
   constructor(
-    private cursosService: CursosService,
+    // private cursosService: CursosService,
+    private cursosService: Cursos2Service,
     private alertModalService: AlertModalService,
     private router: Router,
     private route: ActivatedRoute,
@@ -55,7 +57,7 @@ export class CursosListaComponent implements OnInit {
   onDelete(curso: Curso){
     // this.cursoSelected = curso;
     // this.bsModalRef = this.modalService.show(this.deleteModal, {class: 'modal-md'});
-    this.alertModalService.showConfirm('Confirmação', 'Tem certeza que deseja remover esse curso?')
+    this.alertModalService.showConfirm('Tem certeza que deseja remover esse curso?', 'Confirmação')
       .asObservable()
       .pipe(
         take(1),
