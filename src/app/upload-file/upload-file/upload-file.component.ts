@@ -1,5 +1,7 @@
 import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+
+import { environment } from '../../../environments/environment';
 import { filterResponse, uploadProgress } from 'src/app/shared/rxjs-operators.';
 import { UploadFileService } from '../upload-file.service';
 
@@ -35,7 +37,7 @@ export class UploadFileComponent implements OnInit {
 
   onUpload(){
     if(this.files && this.files.size > 0){
-      this.uploadFileService.upload(this.files, '/api/upload')
+      this.uploadFileService.upload(this.files, environment.BASE_URL + '/upload')
         .pipe(
           uploadProgress(progress => this.progress = progress),
           filterResponse()
@@ -53,6 +55,20 @@ export class UploadFileComponent implements OnInit {
         //   }
         // })
     }
+  }
+
+  onDownloadExcel(){
+    this.uploadFileService.download(environment.BASE_URL + '/downloadExcel')
+      .subscribe(res => {
+        this.uploadFileService.handleFile(res, 'report.xlsx');
+      });
+  }
+
+  onDownloadPdf(){
+    this.uploadFileService.download(environment.BASE_URL + '/downloadPdf')
+    .subscribe(res => {
+      this.uploadFileService.handleFile(res, 'report.pdf');
+    });
   }
 
 }
