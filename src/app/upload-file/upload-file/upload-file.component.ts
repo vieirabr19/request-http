@@ -1,4 +1,8 @@
+import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+
+import { environment } from '../../../environments/environment';
+import { filterResponse, uploadProgress } from 'src/app/shared/rxjs-operators.';
 import { UploadFileService } from '../upload-file.service';
 
 @Component({
@@ -8,6 +12,7 @@ import { UploadFileService } from '../upload-file.service';
 })
 export class UploadFileComponent implements OnInit {
   files: Set<File>;
+  progress = 0;
 
   constructor(
     private uploadFileService: UploadFileService
@@ -27,13 +32,43 @@ export class UploadFileComponent implements OnInit {
     }
     const uploadNames = <HTMLElement>document.querySelector('.uploadNames');
     uploadNames.innerHTML = fileNames.join(', ');
+    this.progress = 0;
   }
 
   onUpload(){
     if(this.files && this.files.size > 0){
-      this.uploadFileService.upload(this.files, '/api/upload')
-        .subscribe(data => console.log(data))
+      this.uploadFileService.upload(this.files, environment.BASE_URL + '/upload')
+        .pipe(
+          uploadProgress(progress => this.progress = progress),
+          filterResponse()
+        )
+        .subscribe(response => console.log('Concluido'));
+
+        // .subscribe((event: HttpEvent<Object>) => {
+        //   if(event.type === HttpEventType.Response){
+        //     console.log('Concluido');
+        //   }else if(event.type === HttpEventType.UploadProgress){
+        //     if(event.total){
+        //       const percentDone = Math.round((event.loaded * 100) / event.total);
+        //       this.progress = percentDone;
+        //     }
+        //   }
+        // })
     }
+  }
+
+  onDownloadExcel(){
+    this.uploadFileService.download(environment.BASE_URL + '/downloadExcel')
+      .subscribe(res => {
+        this.uploadFileService.handleFile(res, 'report.xlsx');
+      });
+  }
+
+  onDownloadPdf(){
+    this.uploadFileService.download(environment.BASE_URL + '/downloadPdf')
+    .subscribe(res => {
+      this.uploadFileService.handleFile(res, 'report.pdf');
+    });
   }
 
 }

@@ -4,6 +4,17 @@
   <span class="uploadNames"></span>
 </div>
 
+<div class="progress mb-3">
+  <div class="progress-bar" role="progressbar" [style.width]="progress + '%'">{{progress}}%</div>
+</div>
+
 <div>
   <button type="button" class="btn btn-primary" (click)="onUpload()" [disabled]="!files">Upload</button>
+</div>
+
+<hr>
+
+<div>
+  <button type="button" class="btn btn-primary me-3" (click)="onDownloadExcel()">Download Excel</button>
+  <button type="button" class="btn btn-primary" (click)="onDownloadPdf()">Download PDF</button>
 </div>
